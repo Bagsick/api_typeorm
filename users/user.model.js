@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 
 module.exports = model;
 
-function model(sequelize) {
+function model(sequelize) { 
     const attributes = {
         email: { type: DataTypes.STRING, allowNull: false },
         passwordHash: { type: DataTypes.STRING, allowNull: false },
@@ -14,14 +14,13 @@ function model(sequelize) {
 
     const options = {
         defaultScope: {
-            // Exclude password hash by default
-            attributes: { exclude: ['passwordHash'] }
+            // exclude password hash by default
+            attributes: {exclude: ['passwordHash'] }
         },
         scopes: {
-            // Include hash with this scope
-            withHash: { attributes: {} }
+            // include hash with this scope
+            withHash: { attributes: {}, }
         }
     };
-
     return sequelize.define('User', attributes, options);
 }

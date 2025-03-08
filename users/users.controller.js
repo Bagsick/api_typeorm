@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
-const validateRequest = require('_middleware/validate-request');
+const validateRequest = require("_middleware/validate-request");
 const Role = require('_helpers/role');
-const userService = require('./user.service');
+const userService = require("./user.service");
 
-// routes
+// Routes
 router.get('/', getAll);
 router.get('/:id', getById);
 router.post('/', createSchema, create);
@@ -14,7 +14,7 @@ router.delete('/:id', _delete);
 
 module.exports = router;
 
-// route functions
+// Route functions
 function getAll(req, res, next) {
     userService.getAll()
         .then(users => res.json(users))
@@ -29,24 +29,23 @@ function getById(req, res, next) {
 
 function create(req, res, next) {
     userService.create(req.body)
-        .then(() => res.json({ message: 'User created' }))
+        .then(() => res.json({ message: "User created" }))
         .catch(next);
 }
 
 function update(req, res, next) {
     userService.update(req.params.id, req.body)
-        .then(() => res.json({ message: 'User updated' }))
+        .then(() => res.json({ message: "User updated" }))
         .catch(next);
 }
 
 function _delete(req, res, next) {
     userService.delete(req.params.id)
-        .then(() => res.json({ message: 'User deleted' }))
+        .then(() => res.json({ message: "User deleted" }))
         .catch(next);
 }
 
-// schema functions
-
+// Schema functions
 function createSchema(req, res, next) {
     const schema = Joi.object({
         title: Joi.string().required(),
@@ -57,20 +56,18 @@ function createSchema(req, res, next) {
         password: Joi.string().min(6).required(),
         confirmPassword: Joi.string().valid(Joi.ref('password')).required()
     });
-
-    return validateRequest(req, next, schema);
+    validateRequest(req, next, schema);
 }
 
 function updateSchema(req, res, next) {
     const schema = Joi.object({
-        title: Joi.string().empty(""),
-        firstName: Joi.string().empty(""),
-        lastName: Joi.string().empty(""),
-        role: Joi.string().valid(Role.Admin, Role.User).empty(""),
-        email: Joi.string().email().empty(""),
-        password: Joi.string().min(6).empty(""),
-        confirmPassword: Joi.string().valid(Joi.ref('password')).empty("")
-    }).with("password", "confirmPassword");
-    
-    return validateRequest(req, res, next, schema);
+        title: Joi.string().empty(''),
+        firstName: Joi.string().empty(''),
+        lastName: Joi.string().empty(''),
+        role: Joi.string().valid(Role.Admin, Role.User).empty(''),
+        email: Joi.string().email().empty(''),
+        password: Joi.string().min(6).empty(''),
+        confirmPassword: Joi.string().valid(Joi.ref('password')).empty('')
+    }).with('password', 'confirmPassword');
+    validateRequest(req, next, schema);
 }
